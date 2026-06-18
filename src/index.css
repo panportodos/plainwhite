@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* 담백보감 커스텀 색상 */
+@theme {
+  /* 브랜드 색상 */
+  --color-navy: #1B2A4A;
+  --color-apricot: #E8A878;
+  --color-apricot-ink: #5A3A22;
+  --color-pink: #D4537E;
+  --color-hanja-red: #A0341E;
+
+  /* 배경 및 표면 */
+  --color-border: #ECE9E2;
+  --color-surface: #F7F5F0;
+
+  /* 텍스트 */
+  --color-ink: #2C2C2A;
+  --color-muted: #A89B76;
+
+  /* 체질 테마색 */
+  --color-constitution-earth: #7A6A3C;
+  --color-constitution-water: #3C6E9E;
+  --color-constitution-fire: #D85A30;
+  --color-constitution-wind: #6F8F5C;
+
+  /* 식이 매트릭스 색상 */
+  --color-diet-animal: #D85A30;
+  --color-diet-plant: #1D9E75;
+  --color-diet-carbs: #D4537E;
+  --color-diet-fat: #639922;
+
+  /* 라운드 */
+  --radius-card: 12px;
+  --radius-inner: 8px;
+}
+
+/* 담백보감 기본 스타일 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #FFFFFF;
+  color: #2C2C2A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 스크롤바 스타일 (선택적) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F5F0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #A89B76;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8A7D5E;
+}
