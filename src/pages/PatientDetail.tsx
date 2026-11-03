@@ -375,7 +375,7 @@ export function PatientDetail() {
                   stroke="#A89B76"
                   style={{ fontSize: '11px' }}
                   tick={(props) => {
-                    const { x, y, payload, index } = props;
+                    const { x, y, index } = props;
                     const data = biaTrendData[index];
                     return (
                       <g transform={`translate(${x},${y})`}>

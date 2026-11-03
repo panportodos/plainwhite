@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { Topbar } from '../components/Topbar';
 import { DIET_BY_CONSTITUTION } from '../lib/dietByConstitution';
-import { Settings as SettingsIcon, Building2, Users as UsersIcon, Database, AlertCircle } from 'lucide-react';
+import { Building2, Users as UsersIcon, Database, AlertCircle } from 'lucide-react';
 import type { ConstitutionDiet } from '../lib/types';
+import { CONSTITUTION_MAP } from '../lib/constants';
 
 export function Settings() {
   const [selectedTab, setSelectedTab] = useState<'clinic' | 'diet' | 'data'>('clinic');
@@ -219,12 +220,13 @@ export function Settings() {
 
 // 체질별 음식 설정 카드
 function DietSettingCard({ diet }: { diet: ConstitutionDiet }) {
+  const color = CONSTITUTION_MAP[diet.constitution].color;
   return (
     <div className="bg-white border border-border rounded-card p-6">
       <div className="flex items-center gap-3 mb-4">
         <div
           className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-medium"
-          style={{ backgroundColor: `${diet.color}15`, color: diet.color }}
+          style={{ backgroundColor: `${color}15`, color }}
         >
           {diet.hanja}
         </div>
