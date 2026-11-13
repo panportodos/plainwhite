@@ -82,6 +82,11 @@ export function saveMealRecord(meal: MealRecord): void {
   localStorage.setItem(STORAGE_KEYS.MEALS, JSON.stringify(meals));
 }
 
+export function deleteMealRecord(id: string): void {
+  const meals = getMealRecords().filter(m => m.id !== id);
+  localStorage.setItem(STORAGE_KEYS.MEALS, JSON.stringify(meals));
+}
+
 // 일정 관련
 export function getSchedule(): ScheduleItem[] {
   initStorage();

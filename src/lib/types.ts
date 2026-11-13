@@ -40,6 +40,8 @@ export interface MealRecord {
     fat: number; // g
     calories: number; // kcal
   };
+  source?: 'manual' | 'ai-photo'; // 기록 방식 (AI 사진 분석이면 'ai-photo')
+  aiFoods?: { name: string; amount: string; protein: number }[]; // AI가 찾은 음식 목록
 }
 
 // 식이 패턴 비중

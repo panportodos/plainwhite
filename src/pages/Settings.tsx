@@ -1,14 +1,19 @@
 // 설정 페이지 - 시스템 설정 및 체질별 음식 관리
 
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Topbar } from '../components/Topbar';
 import { DIET_BY_CONSTITUTION } from '../lib/dietByConstitution';
-import { Building2, Users as UsersIcon, Database, AlertCircle } from 'lucide-react';
+import { Building2, Users as UsersIcon, Database, AlertCircle, Sparkles } from 'lucide-react';
+import { getApiKey, setApiKey } from '../lib/mealPhotoAnalysis';
 import type { ConstitutionDiet } from '../lib/types';
 import { CONSTITUTION_MAP } from '../lib/constants';
 
 export function Settings() {
-  const [selectedTab, setSelectedTab] = useState<'clinic' | 'diet' | 'data'>('clinic');
+  const [searchParams] = useSearchParams();
+  const [selectedTab, setSelectedTab] = useState<'clinic' | 'diet' | 'data' | 'ai'>(
+    searchParams.get('tab') === 'ai' ? 'ai' : 'clinic'
+  );
 
   return (
     <div>
@@ -57,6 +62,19 @@ export function Settings() {
             <div className="flex items-center gap-2">
               <Database size={16} />
               <span>데이터 관리</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setSelectedTab('ai')}
+            className={`px-4 py-3 text-sm font-medium transition-colors ${
+              selectedTab === 'ai'
+                ? 'text-navy border-b-2 border-navy'
+                : 'text-muted hover:text-ink'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Sparkles size={16} />
+              <span>AI 분석</span>
             </div>
           </button>
         </div>
@@ -133,6 +151,9 @@ export function Settings() {
             ))}
           </div>
         )}
+
+        {/* AI 분석 탭 */}
+        {selectedTab === 'ai' && <AiSettings />}
 
         {/* 데이터 관리 탭 */}
         {selectedTab === 'data' && (
@@ -279,6 +300,70 @@ function DietSettingCard({ diet }: { diet: ConstitutionDiet }) {
         <button className="px-4 py-2 bg-navy text-white rounded-lg hover:bg-opacity-90 text-sm font-medium">
           저장
         </button>
+      </div>
+    </div>
+  );
+}
+
+// AI 분석 설정 - Claude API 키 입력
+function AiSettings() {
+  const [key, setKey] = useState(getApiKey());
+  const [saved, setSaved] = useState(!!getApiKey());
+
+  const masked = (k: string) => (k.length > 12 ? `${k.slice(0, 10)}…${k.slice(-4)}` : '••••');
+
+  return (
+    <div className="bg-white border border-border rounded-card p-8">
+      <div className="flex items-center gap-2 mb-2">
+        <Sparkles size={20} className="text-navy" />
+        <h2 className="text-lg font-bold text-ink">식단 사진 AI 분석</h2>
+      </div>
+      <p className="text-sm text-muted mb-6">
+        식이 관리 화면에서 식사 사진을 올리면 Claude가 음식과 양을 보고 단백질량을 추정합니다.
+      </p>
+
+      <label className="block text-sm font-medium text-ink mb-2">Claude API 키</label>
+      {saved && (
+        <p className="text-sm text-diet-good mb-2">저장됨: {masked(getApiKey())}</p>
+      )}
+      <div className="flex gap-2">
+        <input
+          type="password"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="sk-ant-..."
+          autoComplete="off"
+          className="flex-1 px-4 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apricot"
+        />
+        <button
+          onClick={() => {
+            setApiKey(key);
+            setSaved(!!key.trim());
+          }}
+          className="px-4 py-2 bg-navy text-white rounded-lg text-sm"
+        >
+          저장
+        </button>
+        <button
+          onClick={() => {
+            setApiKey('');
+            setKey('');
+            setSaved(false);
+          }}
+          className="px-4 py-2 border border-border rounded-lg text-sm text-ink"
+        >
+          지우기
+        </button>
+      </div>
+
+      <div className="mt-6 bg-surface rounded-lg p-4 text-sm text-ink space-y-2">
+        <p className="font-medium">알아두실 점</p>
+        <ul className="list-disc pl-5 space-y-1 text-muted">
+          <li>API 키는 platform.claude.com의 API Keys 메뉴에서 만들 수 있습니다. 사용량만큼 요금이 부과됩니다.</li>
+          <li>키는 이 브라우저에만 저장되며 서버나 GitHub로 보내지지 않습니다. 공용 PC에서는 사용 후 '지우기'를 눌러 주세요.</li>
+          <li>분석할 때 사진이 Anthropic(Claude) 서버로 전송됩니다. 얼굴 등 환자를 알아볼 수 있는 부분이 찍히지 않게 해 주세요.</li>
+          <li>AI 추정값은 참고용입니다. 저장 전에 단백질 값을 확인하고 필요하면 고쳐 주세요.</li>
+        </ul>
       </div>
     </div>
   );
