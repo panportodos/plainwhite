@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages 주소(https://panportodos.github.io/plainwhite/)에 맞춘 기본 경로
-  base: '/plainwhite/',
+  // 앱은 https://panportodos.github.io/plainwhite/solution/ 에 배포 (루트는 랜딩페이지)
+  base: '/plainwhite/solution/',
   plugins: [react()],
 })

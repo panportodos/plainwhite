@@ -26,14 +26,20 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # 새로고침 시 404가 나지 않도록 index.html을 404.html로 복사
-      - run: cp dist/index.html dist/404.html
+      # 사이트 조립: 루트(/plainwhite/)는 랜딩페이지, /plainwhite/solution/ 은 앱
+      - run: |
+          mkdir _site
+          cp -r landing/. _site/
+          touch _site/.nojekyll
+          cp -r dist _site/solution
+          # 앱 화면에서 새로고침해도 404가 나지 않도록 앱 index.html을 404.html로 사용
+          cp dist/index.html _site/404.html
       - uses: actions/configure-pages@v5
         with:
           enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: _site
 
   deploy:
     needs: build

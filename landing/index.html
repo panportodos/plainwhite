@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동글단백 | 한의원 진료 흐름 안에서 이어지는 단백질 섭취 관리</title>
+    <meta name="description" content="한의원 내원 고령층의 단백질 섭취 습관을 제품과 관리 서비스로 함께 돕는 B2B2C 단백질 관리 솔루션">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        /* Reset & Base - thesoo.co inspired */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* thesoo.co Design System Colors */
+            --primary: #ffe812;
+            --secondary: #d92d20;
+            --accent: #662113;
+            --neutral-50: #e4e4e7;
+            --neutral-100: #000000;
+            --neutral-200: #18181b;
+            --neutral-300: #70707b;
+            --neutral-400: #51525c;
+            --neutral-500: #ffffff;
+            --bg: #ffffff;
+            --text: #000000;
+            --text-muted: #70707b;
+            --text-dark: #18181b;
+
+            /* thesoo.co Spacing System */
+            --spacing-32: 32px;
+            --spacing-48: 48px;
+            --spacing-64: 64px;
+            --spacing-80: 80px;
+            --spacing-120: 120px;
+            --spacing-160: 160px;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.46;
+            letter-spacing: -0.2px;
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Header - thesoo.co sticky nav style */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: 1px solid var(--neutral-50);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: var(--text-dark);
+        }
+
+        .logo img {
+            height: 30px;
+            width: auto;
+            display: block;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-left: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Button System - thesoo.co style */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50px;
+        }
+
+        .btn-primary {
+            background: var(--text-dark);
+            color: var(--neutral-500);
+        }
+
+        .btn-primary:hover {
+            background: var(--neutral-100);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 1px solid var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--text-dark);
+            color: var(--neutral-500);
+        }
+
+        /* Hero Section - thesoo.co large typography style */
+        .hero {
+            padding: var(--spacing-160) 0 var(--spacing-120);
+        }
+
+        .hero-content {
+            max-width: 880px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            padding: 6px 12px;
+            border: 1px solid var(--neutral-50);
+            border-radius: 100px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.33;
+            letter-spacing: -1.1px;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        .hero .lead {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.44;
+            letter-spacing: -0.2px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Visual Product Section */
+        .product-visual {
+            padding: var(--spacing-80) 0;
+            background: var(--neutral-50);
+        }
+
+        .visual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .visual-image {
+            aspect-ratio: 1;
+            background: var(--text-dark);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .product-info h3 {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.33;
+            letter-spacing: -0.6px;
+            margin-bottom: 16px;
+        }
+
+        .product-info p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* Problem Section - thesoo.co card grid style */
+        .problem-section {
+            padding: var(--spacing-120) 0;
+        }
+
+        .section-header {
+            max-width: 760px;
+            margin-bottom: var(--spacing-64);
+        }
+
+        .section-kicker {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.33;
+            letter-spacing: -0.6px;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg);
+            border: 1px solid var(--neutral-50);
+            border-radius: 2px;
+            padding: var(--spacing-32);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .problem-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .problem-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.57;
+        }
+
+        /* Solution Section - Dark background like thesoo.co */
+        .solution-section {
+            padding: var(--spacing-120) 0;
+            background: var(--neutral-50);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 48px;
+        }
+
+        .solution-card {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            padding: var(--spacing-32);
+        }
+
+        .solution-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: var(--accent);
+            border: 1px solid rgba(102, 33, 19, 0.25);
+            padding: 4px 10px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+        }
+
+        .solution-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .solution-card p {
+            font-size: 14px;
+            line-height: 1.57;
+            color: var(--text-muted);
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .flow-step {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Feature Details */
+        .feature-details {
+            padding: var(--spacing-120) 0;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: var(--spacing-64);
+            align-items: start;
+        }
+
+        .quote {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.4;
+            letter-spacing: -0.6px;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--neutral-50);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .feature-item h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.57;
+        }
+
+        /* Pilot Section */
+        .pilot-section {
+            padding: var(--spacing-120) 0;
+            background: var(--neutral-50);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .metric-card {
+            background: var(--bg);
+            border: 1px solid var(--neutral-50);
+            border-radius: 2px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -1.1px;
+            color: var(--text);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Roadmap Section */
+        .roadmap-section {
+            padding: var(--spacing-120) 0;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .roadmap-step {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+            background: var(--bg);
+            border: 1px solid var(--neutral-50);
+            border-radius: 2px;
+            padding: var(--spacing-32);
+            align-items: start;
+        }
+
+        .step-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .roadmap-step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .roadmap-step p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.57;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: var(--spacing-120) 0;
+            text-align: center;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-64);
+            background: #d7d7dd;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+        }
+
+        .cta-box h2 {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.33;
+            letter-spacing: -0.6px;
+            margin-bottom: 16px;
+        }
+
+        .cta-box .lead {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .notice {
+            margin-top: 32px;
+            padding: 20px;
+            background: var(--bg);
+            border: 1px solid var(--neutral-50);
+            border-radius: 2px;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* Footer - thesoo.co minimal style */
+        footer {
+            background: var(--neutral-50);
+            padding: var(--spacing-64) 0 var(--spacing-32);
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: var(--spacing-48);
+            padding-bottom: var(--spacing-48);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 18px;
+        }
+
+        .footer-logo img {
+            height: 28px;
+            width: auto;
+            display: block;
+        }
+
+        .footer-tagline {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .footer-col h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: grid;
+            gap: 9px;
+        }
+
+        .footer-col li {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding: var(--spacing-32) 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            padding-top: var(--spacing-32);
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .footer-copy {
+            margin-top: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Animations - thesoo.co inspired */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Brand Story */
+        .story-intro {
+            padding: var(--spacing-120) 0;
+            text-align: center;
+        }
+
+        .story-intro .section-kicker {
+            margin-bottom: 16px;
+        }
+
+        .story-headline {
+            font-size: 44px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .story-sub {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .story-lead {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 36px;
+        }
+
+        .story-tagline {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: var(--accent);
+            padding: 16px 32px;
+            border: 1.5px solid var(--accent);
+            border-radius: 100px;
+        }
+
+        .why-section {
+            padding: var(--spacing-120) 0;
+            background: var(--neutral-50);
+        }
+
+        .why-story {
+            max-width: 820px;
+            margin-bottom: var(--spacing-64);
+        }
+
+        .why-story p {
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .why-story p:last-child {
+            margin-bottom: 0;
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .principle-card {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            padding: var(--spacing-32);
+        }
+
+        .principle-mark {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .principle-card h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .principle-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .first-step {
+            padding: var(--spacing-120) 0;
+        }
+
+        .step-product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-48);
+            align-items: center;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .first-step .section-header {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .step-product-grid .check-list {
+            display: inline-grid;
+            text-align: left;
+        }
+
+        .step-product-grid .hero-buttons {
+            justify-content: center !important;
+        }
+
+        .check-list {
+            list-style: none;
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .check-list li {
+            position: relative;
+            padding-left: 28px;
+            font-size: 15px;
+            line-height: 1.65;
+            color: var(--text);
+        }
+
+        .check-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 7px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .ingredient-caption {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .ingredient-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .ingredient-card {
+            background: var(--bg);
+            border: 1px solid var(--neutral-50);
+            border-radius: 2px;
+            padding: 22px;
+        }
+
+        .ingredient-icon {
+            font-size: 26px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .ingredient-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .ingredient-card p {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        .vision-section {
+            padding: var(--spacing-120) 0;
+            background: var(--neutral-50);
+        }
+
+        .vision-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: var(--spacing-48);
+        }
+
+        .vision-step {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            padding: 28px;
+        }
+
+        .vision-step .step-num {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .vision-step h4 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .vision-detail {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 820px;
+            gap: var(--spacing-64);
+            align-items: start;
+            margin-bottom: var(--spacing-48);
+        }
+
+        .vision-closing p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .vision-card {
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+            padding: var(--spacing-32);
+        }
+
+        .vision-card .check-list {
+            margin-bottom: 0;
+        }
+
+        .vision-tagline-wrap {
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+                line-height: 1.33;
+                letter-spacing: -0.6px;
+            }
+
+            .visual-grid,
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .problem-grid,
+            .solution-grid,
+            .metrics-grid,
+            .flow-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-step {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .story-headline {
+                font-size: 30px;
+                letter-spacing: -0.6px;
+            }
+
+            .principle-grid,
+            .step-product-grid,
+            .ingredient-grid,
+            .vision-steps,
+            .vision-detail {
+                grid-template-columns: 1fr;
+            }
+
+            .story-intro,
+            .why-section,
+            .first-step,
+            .vision-section {
+                padding: var(--spacing-64) 0;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-32);
+            }
+
+            .hero {
+                padding: var(--spacing-80) 0 var(--spacing-64);
+            }
+
+            .problem-section,
+            .solution-section,
+            .feature-details,
+            .pilot-section,
+            .roadmap-section,
+            .cta-section {
+                padding: var(--spacing-64) 0;
+            }
+        }
+        .howto-section {
+            padding: var(--spacing-120) 0;
+            background: var(--bg);
+        }
+
+        .howto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .howto-card {
+            background: var(--neutral-50);
+            border-radius: 8px;
+            padding: var(--spacing-32);
+        }
+
+        .howto-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .howto-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.4;
+            text-wrap: pretty;
+        }
+
+        .howto-sub {
+            margin-top: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .howto-note {
+            max-width: 960px;
+            margin: 24px auto 0;
+            padding: 20px 24px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .howto-note strong {
+            color: var(--text-dark);
+            margin-right: 8px;
+        }
+
+        .howto-closing {
+            margin-top: var(--spacing-48);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="images/logo.png" alt="PlainWhite 로고">
+                    동글단백
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#story">Company</a></li>
+                    <li><a href="#brand">Brand</a></li>
+                    <li><a href="#rnd">R&amp;D</a></li>
+                    <li><a href="#product">Product</a></li>
+                    <li><a href="#solution">Solution</a></li>
+                    <li><a href="#contact">News</a></li>
+                </ul>
+                <a href="#contact" class="btn btn-outline">한의원 도입 문의</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <span class="eyebrow">B2B2C Protein Care Solution</span>
+                <h1>진료실에서 시작되는
+단백질 섭취 관리</h1>
+                <p class="lead">동글단백은 한의원 내원 고령층의 식사·소화 상태를 살피고, 식물성 단백 환과 관리 웹서비스를 통해 꾸준한 섭취 습관을 돕는 한의원 연계 단백질 관리 솔루션입니다.</p>
+                <div class="hero-buttons">
+                    <!-- TODO(솔루션 연동): 이 "솔루션 보기" 버튼은 실제 구동되는 담백보감 솔루션
+                         (Claude Code로 빌드한 app.tsx 기반 앱)이 열리도록 연결되어야 함.
+                         배포 시 아래 href를 솔루션 앱 경로/URL로 교체할 것
+                         (예: href="solution/index.html" 또는 별도 배포 주소, 필요 시 target="_blank").
+                         현재는 임시로 페이지 내 #solution 섹션으로 스크롤됨. -->
+                    <a href="solution/" class="btn btn-primary">솔루션 보기</a>
+                    <a href="#pilot" class="btn btn-outline">파일럿 도입 안내</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Visual -->
+    <section id="product" class="product-visual" style="background: #fff;">
+        <div class="container">
+            <figure class="fade-in" style="margin: 0; border-radius: 8px; overflow: hidden; display: block;">
+                <img src="images/product-solution.png" alt="동글단백(제품)과 담백보감(솔루션)" style="display: block; width: 100%; height: auto;">
+            </figure>
+        </div>
+    </section>
+
+    <!-- Brand Story: Intro -->
+    <section id="story" class="story-intro">
+        <div class="container">
+            <div class="fade-in">
+                <div class="section-kicker">BRAND STORY</div>
+                <h2 class="story-headline">담아내다, 백년의 지혜</h2>
+                <p class="story-sub">한의사들이 담백하게 만든 브랜드, PlainWhite</p>
+                <p class="story-lead">몸에 맞으니 마음까지 편안한 단백질, 가족에게 자신 있게 권할 수 있는 단백질.</p>
+                <div class="story-tagline">"몸에 담백함을, 삶에 편안함을"</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story: Why -->
+    <section id="brand" class="why-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">WHY PLAINWHITE</div>
+                <h2 class="section-title">왜 PlainWhite인가?</h2>
+            </div>
+            <div class="why-story fade-in" style="text-align: justify">
+                <p style="text-align: left">어느 날 친구가 물었습니다. 
+"부모님께 드릴 단백질, 뭐가 좋을까?" 
+그 단순한 질문 앞에서 우리는 쉽게 답하지 못했습니다.</p>
+                <p>사랑하는 가족에게 자신 있게 권할 수 있는 단백질, 
+몸에 부담 없고 마음까지 편안한 단백질. 
+그 해답을 찾기 위해 PlainWhite가 시작되었습니다.</p>
+                <p>우리는 담백함 속에 백년의 지혜를 담습니다. 
+한의사들의 임상 경험, 영양학적 근거, 그리고 전통의 지혜를 
+오늘의 삶에 맞게 풀어내어, 누구나 오래도록 함께할 수 있는 건강을 만들고자 합니다.</p>
+            </div>
+            <figure class="why-photo fade-in" style="margin: 0 auto var(--spacing-64); max-width: 680px; border-radius: 8px; overflow: hidden;">
+                <img src="images/brand-story.png" alt="한의원 약재실에서 동글단백 원료를 함께 살펴보는 한의사들" style="display: block; width: 100%; height: auto; object-fit: cover;">
+            </figure>
+            <div class="principle-grid">
+                <article class="principle-card fade-in">
+                    <div class="principle-mark">Plain</div>
+                    <h4>담백하게</h4>
+                    <p>불필요한 것을 덜어내고 본질만 담습니다.</p>
+                </article>
+                <article class="principle-card fade-in">
+                    <div class="principle-mark">White</div>
+                    <h4>순수하게</h4>
+                    <p>성분과 과정은 투명하고 정직합니다.</p>
+                </article>
+                <article class="principle-card fade-in">
+                    <div class="principle-mark">Together</div>
+                    <h4>건강하게</h4>
+                    <p>나와 가족이 함께 누릴 수 있는 건강을 만듭니다.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="problem-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">WHY DANBAEKHWAN</div>
+                <h2 class="section-title">단백질이 필요하다는 말만으로는
+섭취가 이어지지 않았습니다.</h2>
+                <p class="section-description">진료 현장에서 확인한 문제는 지식의 부족이 아니라, 실제로 먹을 수 있고 지속할 수 있으며 누군가 확인해주는 구조의 부재였습니다.</p>
+            </div>
+            <div class="problem-grid">
+                <article class="problem-card fade-in">
+                    <div class="problem-number">01</div>
+                    <h3>섭취량 부족</h3>
+                    <p>식사량 감소, 입맛 변화, 조리 부담으로 필요한 단백질을 매일 충분히 챙기기 어렵습니다.</p>
+                </article>
+                <article class="problem-card fade-in">
+                    <div class="problem-number">02</div>
+                    <h3>소화 부담</h3>
+                    <p>분말·음료형 제품이 맞지 않거나, 유청·대두 기반 제품에 부담을 느끼는 분들이 있습니다.</p>
+                </article>
+                <article class="problem-card fade-in">
+                    <div class="problem-number">03</div>
+                    <h3>관리 공백</h3>
+                    <p>제품은 있어도 얼마나 먹는지, 중단 이유가 무엇인지 한의원 진료 흐름 안에서 확인하기 어렵습니다.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">SOLUTION</div>
+                <h2 class="section-title">제품과 관리 서비스를 함께 설계한
+한의원 연계 단백질 관리 모델</h2>
+                <p class="section-description">동글단백은 제품 판매에 그치지 않고, 식이·체성분·상담 정보를 바탕으로 섭취 상태를 기록하고 재방문 상담에 연결하는 구조를 지향합니다.</p>
+            </div>
+            <div class="solution-grid">
+                <article class="solution-card fade-in">
+                    <span class="solution-tag">P1 · MVP</span>
+                    <h3>동글단백</h3>
+                    <p>시장 진입성과 고령층 섭취 반응을 확인하기 위한 식물성 단백 환 테스트 제품입니다.</p>
+                </article>
+                <article class="solution-card fade-in">
+                    <span class="solution-tag">P2 · LINE-UP</span>
+                    <h3>체질 상담 기반 라인업</h3>
+                    <p>향후 식사 패턴, 소화 상태, 상담 정보를 반영해 선택지를 세분화하는 제품 라인으로 확장합니다.</p>
+                </article>
+                <article class="solution-card fade-in">
+                    <span class="solution-tag">P3 · WEB SERVICE</span>
+                    <h3>담백보감</h3>
+                    <p>한의원에서 환자의 식이·체성분·섭취 상태를 기록하고 상담 흐름에 활용하는 관리 웹서비스입니다.</p>
+                </article>
+            </div>
+            <div class="flow-steps">
+                <div class="flow-step">진료 상담</div>
+                <div class="flow-step">식이·체성분 기록</div>
+                <div class="flow-step">섭취 가이드 제공</div>
+                <div class="flow-step">재방문 관리</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story: First Step (moved below Solution) -->
+    <section class="first-step">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">FIRST STEP · 현재 제품</div>
+                <h2 class="section-title">첫걸음 — 동글단백</h2>
+                <p class="section-description">단백질에 기와 혈을 조화롭게 보충하는 쌍화탕의 기운을 더했습니다.</p>
+            </div>
+            <div class="step-product-grid">
+                <figure class="fade-in" style="margin: 0 auto var(--spacing-48); max-width: 760px; border-radius: 8px; overflow: hidden;">
+                    <img src="images/donggle-package.png" alt="동글단백 패키지 및 스틱" style="display: block; width: 100%; height: auto;">
+                </figure>
+                <div class="step-product-info fade-in">
+                    <ul class="check-list">
+                        <li>환(丸) 제형으로 불필요한 합성첨가물을 제거하여 오래 먹어도 부담이 적습니다.</li>
+                        <li>한방 소화효소를 함유하여 부모님부터 젊은 세대까지 누구나 속 편하게 즐길 수 있습니다.</li>
+                    </ul>
+                    <div class="hero-buttons" style="justify-content: flex-start;">
+                        <a href="#contact" class="btn btn-primary">제품 상세 보기</a>
+                        <a href="#contact" class="btn btn-outline">구매하기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Eat -->
+    <section id="howto" class="howto-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">HOW TO EAT · 먹는 방법</div>
+                <h2 class="section-title">동글단백, 이렇게 드세요</h2>
+            </div>
+            <div class="howto-grid">
+                <div class="howto-card fade-in">
+                    <div class="howto-label">1회 섭취량</div>
+                    <div class="howto-value">10g</div>
+                    <div class="howto-sub">숟가락 ~스푼</div>
+                </div>
+                <div class="howto-card fade-in">
+                    <div class="howto-label">하루 섭취 횟수</div>
+                    <div class="howto-value">하루 2회</div>
+                </div>
+                <div class="howto-card fade-in">
+                    <div class="howto-label">권장 시점</div>
+                    <div class="howto-value">아침 공복 · 운동 전후 · 간식 대신</div>
+                </div>
+                <div class="howto-card fade-in">
+                    <div class="howto-label">섭취 방식</div>
+                    <div class="howto-value">물과 함께 삼키거나, 씹어서</div>
+                    <div class="howto-sub">편한 방법으로 드시면 됩니다.</div>
+                </div>
+            </div>
+            <div class="howto-note fade-in">
+                <strong>참고</strong>처음 씹어 먹을 때는 다소 퍽퍽하다고 느껴질 수 있으니 물이나 차와 함께 섭취해주세요
+            </div>
+            <p class="howto-closing fade-in">꾸준한 섭취가 건강한 체질과 근육 생성에 도움이 됩니다.</p>
+        </div>
+    </section>
+
+    <!-- Feature Details -->
+    <section class="feature-details">
+        <div class="container">
+            <div class="detail-grid">
+                <div class="quote fade-in">
+                    "먹어야 한다"보다 중요한 것은<br/>"계속 먹을 수 있는 구조"입니다.
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item fade-in">
+                        <span class="feature-dot"></span>
+                        <div>
+                            <h4>환 제형</h4>
+                            <p>분말·음료형 섭취가 부담스러운 고령층을 고려한 휴대형 섭취 방식</p>
+                        </div>
+                    </div>
+                    <div class="feature-item fade-in">
+                        <span class="feature-dot"></span>
+                        <div>
+                            <h4>식물성 단백 설계</h4>
+                            <p>완두·쌀 단백 기반으로 고령층의 섭취 부담을 줄이는 방향의 테스트 제품</p>
+                        </div>
+                    </div>
+                    <div class="feature-item fade-in">
+                        <span class="feature-dot"></span>
+                        <div>
+                            <h4>한의원 운영 도구</h4>
+                            <p>상담, 추천, 섭취 확인, 재구매 안내를 하나의 흐름으로 연결</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story: Next / Vision (moved below Feature Details) -->
+    <section id="rnd" class="vision-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">NEXT STORY · 비전</div>
+                <h2 class="section-title">다음 이야기 — 담백보감</h2>
+                <p class="section-description">담백 PlainWhite의 철학은 한 제품에 머물지 않습니다. 담백함·순수함·함께함의 원칙 위에서 체질 맞춤 건강이라는 새로운 여정을 준비합니다.</p>
+            </div>
+            <figure class="vision-dashboard fade-in" style="margin: 0 0 var(--spacing-48); border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 10px; overflow: hidden; box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12); background: #fff;">
+                <img src="images/dashboard.png" alt="담백보감 한의원 관리 웹서비스 대시보드 화면" style="display: block; width: 100%; height: auto;">
+            </figure>
+            <div class="vision-steps">
+                <article class="vision-step fade-in">
+                    <span class="step-num">STEP 1</span>
+                    <h4>체질 설문 (웹)</h4>
+                </article>
+                <article class="vision-step fade-in">
+                    <span class="step-num">STEP 2</span>
+                    <h4>체질 라이프스타일 정보 제공</h4>
+                </article>
+                <article class="vision-step fade-in">
+                    <span class="step-num">STEP 3</span>
+                    <h4>동글단백 (제품)</h4>
+                </article>
+            </div>
+            <div class="vision-detail">
+                <div class="vision-closing fade-in">
+                    <p>체질 체크에서 라이프스타일 정보, 그리고 제품으로 이어지는 루틴을 통해 누구나 자신의 몸에 꼭 맞는 건강 관리 방식을 찾을 수 있도록 합니다. 진단과 제품을 넘어, 생활 전반에 스며드는 맞춤 건강 솔루션 — 그것이 우리가 함께 만들어갈 미래입니다.</p>
+                </div>
+            </div>
+            <div class="vision-tagline-wrap fade-in">
+                <div style="margin-top: 24px;">
+                    <!-- TODO(솔루션 연동): 이 "이용해보기" 버튼은 실제 구동되는 담백보감 솔루션
+                         (Claude Code로 빌드한 app.tsx 기반 앱)이 열리도록 연결되어야 함.
+                         배포 시 아래 href를 솔루션 앱 경로/URL로 교체할 것
+                         (예: href="solution/index.html" 또는 별도 배포 주소, 필요 시 target="_blank").
+                         현재는 임시로 #contact 섹션으로 스크롤됨. -->
+                    <a href="solution/" class="btn btn-primary">이용해보기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section (moved above Pilot) -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">ROADMAP</div>
+                <h2 class="section-title">P1 판매 데이터로 P2와 P3를 고도화합니다.</h2>
+            </div>
+            <div class="roadmap-grid">
+                <article class="roadmap-step fade-in">
+                    <div class="step-label">STEP 1</div>
+                    <div>
+                        <h3>동글단백 최종 양산</h3>
+                        <p>품질검사, 패키지 보완, 한의원 복용 가이드와 운영 매뉴얼 제작</p>
+                    </div>
+                </article>
+                <article class="roadmap-step fade-in">
+                    <div class="step-label">STEP 2</div>
+                    <div>
+                        <h3>10개 한의원 파일럿</h3>
+                        <p>구매전환율, 재구매율, 섭취 지속률, 중단 사유, 운영 편의성 확인</p>
+                    </div>
+                </article>
+                <article class="roadmap-step fade-in">
+                    <div class="step-label">STEP 3</div>
+                    <div>
+                        <h3>담백보감 고도화</h3>
+                        <p>식이 분석, 섭취 기록, 상담 메모, 재구매 안내 기능 개선</p>
+                    </div>
+                </article>
+                <article class="roadmap-step fade-in">
+                    <div class="step-label">STEP 4</div>
+                    <div>
+                        <h3>한의원 네트워크 확장</h3>
+                        <p>30개소, 70개소, 150개소로 단계적 확장하며 반복구매 모델 검증</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilot Section -->
+    <section id="pilot" class="pilot-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-kicker">PILOT PLAN</div>
+                <h2 class="section-title">10개 한의원 파일럿으로
+구매와 지속 섭취 데이터를 검증합니다.</h2>
+                <p class="section-description">초기 도입 의향과 구매 의향을 실제 매출·재구매·운영 편의성 데이터로 전환하는 것이 1차 목표입니다.</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card fade-in">
+                    <span class="metric-value">10</span>
+                    <div class="metric-label">초기 파일럿 한의원</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <span class="metric-value">72%</span>
+                    <div class="metric-label">원내 단백질 개발 시 구매의향</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <span class="metric-value">5개</span>
+                    <div class="metric-label">핵심 검증 지표</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <span class="metric-value">150</span>
+                    <div class="metric-label">단계적 확장 목표</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section" style="background: var(--neutral-50);">
+        <div class="container">
+            <div class="cta-box fade-in">
+                <div class="section-kicker">FOR CLINICS</div>
+                <h2>환자 식이 상담을
+지속 가능한 관리 경험으로</h2>
+                <p class="lead">동글단백은 한의원의 진료 흐름을 해치지 않으면서, 고령층의 단백질 섭취 습관을 함께 확인하고 관리하는 도구가 되고자 합니다.</p>
+                <div class="cta-buttons">
+                    <a href="mailto:panportodos@gmail.com" class="btn btn-primary">도입 문의하기</a>
+                    <a href="#" class="btn btn-outline">소개서 요청</a>
+                </div>
+                <div class="notice">
+                    본 페이지의 내용은 제품 및 서비스 소개를 위한 자료입니다. 동글단백은 일반식품 기반의 섭취 관리 제품으로, 질병의 예방·치료 또는 의학적 효능을 표방하지 않습니다. 개인의 건강 상태와 식이 관리는 전문가 상담 및 필요한 경우 의료적 판단에 따라 진행되어야 합니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand-col">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="PlainWhite 로고">
+                        PlainWhite
+                    </div>
+                    <p class="footer-tagline">PlainWhite의 첫 번째 제품 '동글단백'<br/>한의사가 개발한 체질 맞춤 건강식품</p>
+                </div>
+                <div class="footer-col">
+                    <h4>고객 문의</h4>
+                    <ul>
+                        <li>02-1234-5678</li>
+                        <li>help@plainwhite.co.kr</li>
+                        <li>서울시 강남구 한방길 123</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>고객센터 운영시간</h4>
+                    <ul>
+                        <li>평일 09:00 - 18:00</li>
+                        <li>토요일 09:00 - 15:00</li>
+                        <li>일요일 및 공휴일 휴무</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+                <a href="#">교환/환불</a>
+            </div>
+            <div class="footer-bottom">
+                상호명: (주)PlainWhite &nbsp;|&nbsp; 대표: 정종혁<br/>
+                사업자등록번호: 123-45-67890 &nbsp;|&nbsp; 통신판매업신고: 2024-서울강남-1234
+                <p class="footer-copy">© 2026 PlainWhite. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.05,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.animationDelay = '0s';
+                        entry.target.classList.add('fade-in');
+                    }, index * 50);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
