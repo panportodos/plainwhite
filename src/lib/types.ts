@@ -52,6 +52,9 @@ export interface DietPattern {
   fat: number; // % (지방)
 }
 
+// 운동량 (0: 거의 안 함, 1: 주 1~2회, 2: 주 3~4회, 3: 주 5회 이상)
+export type ExerciseLevel = 0 | 1 | 2 | 3;
+
 // 환자 정보
 export interface Patient {
   id: string;
@@ -73,6 +76,9 @@ export interface Patient {
 
   // 상태
   status: PatientStatus;
+
+  // 운동량 (근육량 예측에 사용, 모르면 비워 둠)
+  exercise?: ExerciseLevel;
 
   // 식이 패턴
   dietPattern: DietPattern;

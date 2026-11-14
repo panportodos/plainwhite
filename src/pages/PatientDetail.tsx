@@ -4,7 +4,9 @@ import { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Topbar } from '../components/Topbar';
 import { ConstitutionBadge } from '../components/ConstitutionBadge';
-import { getPatientById, getInbodyRecords, getAllPatients } from '../lib/storage';
+import { getPatientById, getInbodyRecords, getAllPatients, savePatient } from '../lib/storage';
+import { EXERCISE_LABELS } from '../lib/musclePrediction';
+import type { ExerciseLevel } from '../lib/types';
 import { DIET_COLORS } from '../lib/constants';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChevronDown, Activity, Utensils, Check } from 'lucide-react';
@@ -18,7 +20,9 @@ export function PatientDetail() {
   const [showPatientDropdown, setShowPatientDropdown] = useState(false);
 
   // 환자 데이터 로드
-  const patient = useMemo(() => getPatientById(id!), [id]);
+  const [refreshKey, setRefreshKey] = useState(0); // 운동량 저장 후 새로고침용
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const patient = useMemo(() => getPatientById(id!), [id, refreshKey]);
   const inbodyRecords = useMemo(() => getInbodyRecords(id), [id]);
   const allPatients = useMemo(() => getAllPatients(), []);
 
@@ -177,8 +181,8 @@ export function PatientDetail() {
             </div>
           </div>
 
-          {/* 아랫줄 3칸 */}
-          <div className="grid grid-cols-3 gap-6">
+          {/* 아랫줄 4칸 */}
+          <div className="grid grid-cols-4 gap-6">
             <div>
               <div className="text-xs text-muted mb-2">신장</div>
               <div className="text-base text-ink">{patient.height} cm</div>
@@ -194,6 +198,25 @@ export function PatientDetail() {
               <div className="text-base text-ink">
                 {currentRecord ? currentRecord.bmi.toFixed(1) : patient.bmi.toFixed(1)}
               </div>
+            </div>
+            <div>
+              <div className="text-xs text-muted mb-2">운동량</div>
+              <select
+                value={patient.exercise ?? ''}
+                onChange={(e) => {
+                  const v = e.target.value === '' ? undefined : (Number(e.target.value) as ExerciseLevel);
+                  savePatient({ ...patient, exercise: v });
+                  setRefreshKey((k) => k + 1);
+                }}
+                className="px-2 py-1 border border-border rounded-lg text-sm text-ink"
+              >
+                <option value="">입력 안 함</option>
+                {([0, 1, 2, 3] as ExerciseLevel[]).map((l) => (
+                  <option key={l} value={l}>
+                    {EXERCISE_LABELS[l]}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
