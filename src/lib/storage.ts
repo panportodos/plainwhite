@@ -1,15 +1,16 @@
 // localStorage 래퍼
 // 나중에 실제 API로 교체할 때 이 파일만 수정하면 됨
 
-import type { Patient, InbodyRecord, MealRecord, ScheduleItem } from './types';
+import type { Patient, InbodyRecord, MealRecord, ScheduleItem, DietAnalysis } from './types';
 import { DEFAULT_ENGAGEMENT_SETTINGS, type EngagementSettings } from './engagement';
-import { MOCK_PATIENTS, MOCK_INBODY_RECORDS, MOCK_MEAL_RECORDS, MOCK_SCHEDULE } from './mockData';
+import { MOCK_PATIENTS, MOCK_INBODY_RECORDS, MOCK_MEAL_RECORDS, MOCK_SCHEDULE, MOCK_DIET_ANALYSES } from './mockData';
 
 const STORAGE_KEYS = {
   PATIENTS: 'dambaek_patients',
   INBODY: 'dambaek_inbody',
   MEALS: 'dambaek_meals',
   SCHEDULE: 'dambaek_schedule',
+  DIET_ANALYSES: 'dambaek_diet_analyses',
 } as const;
 
 // 초기 데이터 로드
@@ -25,6 +26,9 @@ function initStorage() {
   }
   if (!localStorage.getItem(STORAGE_KEYS.SCHEDULE)) {
     localStorage.setItem(STORAGE_KEYS.SCHEDULE, JSON.stringify(MOCK_SCHEDULE));
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.DIET_ANALYSES)) {
+    localStorage.setItem(STORAGE_KEYS.DIET_ANALYSES, JSON.stringify(MOCK_DIET_ANALYSES));
   }
 }
 
@@ -115,4 +119,18 @@ export function getEngagementSettings(): EngagementSettings {
 
 export function saveEngagementSettings(settings: EngagementSettings): void {
   localStorage.setItem(ENGAGEMENT_KEY, JSON.stringify(settings));
+}
+
+// 3일 식단 분석 관련
+export function getDietAnalyses(patientId?: string): DietAnalysis[] {
+  initStorage();
+  const data = localStorage.getItem(STORAGE_KEYS.DIET_ANALYSES);
+  const list: DietAnalysis[] = data ? JSON.parse(data) : [];
+  return patientId ? list.filter((d) => d.patientId === patientId) : list;
+}
+
+export function saveDietAnalysis(analysis: DietAnalysis): void {
+  const list = getDietAnalyses().filter((d) => d.id !== analysis.id);
+  list.push(analysis);
+  localStorage.setItem(STORAGE_KEYS.DIET_ANALYSES, JSON.stringify(list));
 }

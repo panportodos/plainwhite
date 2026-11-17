@@ -1,6 +1,6 @@
 // Mock 데이터 - 환자, 인바디 기록, 식단 기록
 
-import type { Patient, InbodyRecord, MealRecord, ScheduleItem } from './types';
+import type { Patient, InbodyRecord, MealRecord, ScheduleItem, DietAnalysis } from './types';
 
 // 환자 8명 데이터
 export const MOCK_PATIENTS: Patient[] = [
@@ -767,5 +767,32 @@ export const MOCK_SCHEDULE: ScheduleItem[] = [
     patientName: '김태현',
     type: '식이 상담',
     scheduledAt: '2024-06-17T15:30:00',
+  },
+];
+
+// 3일 식단 분석 (김민서 - 3회차 인바디 전에 가져온 3일 치 사진)
+export const MOCK_DIET_ANALYSES: DietAnalysis[] = [
+  {
+    id: 'DA001-1',
+    patientId: 'P001',
+    from: '2024-06-07',
+    to: '2024-06-09',
+    photoCount: 9,
+    daily: [
+      { date: '2024-06-07', breakfast: 32, lunch: 28, dinner: 35, snack: 0 },
+      { date: '2024-06-08', breakfast: 25, lunch: 30, dinner: 38, snack: 0 },
+      { date: '2024-06-09', breakfast: 34, lunch: 22, dinner: 40, snack: 0 },
+    ],
+    nutrients: {
+      vitaminD: 3.2,
+      calcium: 520,
+      fiber: 22,
+      magnesium: 290,
+      vitaminC: 115,
+      iron: 13,
+      vitaminB12: 4.1,
+      sodium: 3400,
+    },
+    createdAt: '2024-06-10T10:00:00',
   },
 ];
