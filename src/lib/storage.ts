@@ -2,6 +2,7 @@
 // 나중에 실제 API로 교체할 때 이 파일만 수정하면 됨
 
 import type { Patient, InbodyRecord, MealRecord, ScheduleItem } from './types';
+import { DEFAULT_ENGAGEMENT_SETTINGS, type EngagementSettings } from './engagement';
 import { MOCK_PATIENTS, MOCK_INBODY_RECORDS, MOCK_MEAL_RECORDS, MOCK_SCHEDULE } from './mockData';
 
 const STORAGE_KEYS = {
@@ -98,4 +99,20 @@ export function getTodaySchedule(): ScheduleItem[] {
   const schedule = getSchedule();
   const today = new Date().toISOString().split('T')[0];
   return schedule.filter(s => s.scheduledAt.startsWith(today));
+}
+
+// 환자 참여 · 광고 설정
+const ENGAGEMENT_KEY = 'dambaek_engagement_settings';
+
+export function getEngagementSettings(): EngagementSettings {
+  try {
+    const data = localStorage.getItem(ENGAGEMENT_KEY);
+    return data ? { ...DEFAULT_ENGAGEMENT_SETTINGS, ...JSON.parse(data) } : DEFAULT_ENGAGEMENT_SETTINGS;
+  } catch {
+    return DEFAULT_ENGAGEMENT_SETTINGS;
+  }
+}
+
+export function saveEngagementSettings(settings: EngagementSettings): void {
+  localStorage.setItem(ENGAGEMENT_KEY, JSON.stringify(settings));
 }

@@ -9,6 +9,7 @@ import { DietManagement } from './pages/DietManagement';
 import { InbodyScan } from './pages/InbodyScan';
 import { Analytics } from './pages/Analytics';
 import { Settings } from './pages/Settings';
+import { Engagement } from './pages/Engagement';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/patients/:id/diet" element={<DietManagement />} />
           <Route path="/patients/:id/inbody" element={<InbodyScan />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/engagement" element={<Engagement />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </AppLayout>

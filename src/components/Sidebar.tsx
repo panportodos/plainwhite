@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Users,
   BarChart3,
+  Trophy,
   Settings
 } from 'lucide-react';
 
@@ -12,6 +13,7 @@ const menuItems = [
   { path: '/', label: '대시보드', icon: LayoutDashboard },
   { path: '/patients', label: '환자 관리', icon: Users },
   { path: '/analytics', label: '데이터 분석', icon: BarChart3 },
+  { path: '/engagement', label: '환자 참여', icon: Trophy },
   { path: '/settings', label: '설정', icon: Settings },
 ];
 

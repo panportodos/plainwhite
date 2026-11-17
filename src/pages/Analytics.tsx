@@ -7,6 +7,7 @@ import { CONSTITUTION_MAP } from '../lib/constants';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, Users, Activity, Award } from 'lucide-react';
 import type { Constitution } from '../lib/types';
+import { CohortAnalysis } from '../components/CohortAnalysis';
 
 export function Analytics() {
   const allPatients = useMemo(() => getAllPatients(), []);
@@ -277,6 +278,9 @@ export function Analytics() {
             </li>
           </ul>
         </div>
+
+        {/* 근육량 예측 모델 · 코호트 분석 */}
+        <CohortAnalysis patients={allPatients} records={allInbodyRecords} />
       </div>
     </div>
   );
