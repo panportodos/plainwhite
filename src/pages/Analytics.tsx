@@ -67,27 +67,6 @@ export function Analytics() {
     return ranges;
   }, [allPatients]);
 
-  // 평균 단백질 증감 by 체질
-  const proteinChangeByConstitution = useMemo(() => {
-    const data: Record<Constitution, { sum: number; count: number }> = {
-      태음인: { sum: 0, count: 0 },
-      소음인: { sum: 0, count: 0 },
-      소양인: { sum: 0, count: 0 },
-      태양인: { sum: 0, count: 0 },
-    };
-
-    allPatients.forEach((p) => {
-      data[p.constitution].sum += p.proteinChange;
-      data[p.constitution].count++;
-    });
-
-    return Object.entries(data).map(([constitution, { sum, count }]) => ({
-      name: constitution,
-      avgChange: count > 0 ? (sum / count).toFixed(2) : '0.00',
-      color: CONSTITUTION_MAP[constitution as Constitution].color,
-    }));
-  }, [allPatients]);
-
   return (
     <div>
       <Topbar
@@ -216,46 +195,8 @@ export function Analytics() {
           </div>
         </div>
 
-        {/* 체질별 평균 단백질 증감 */}
-        <div className="bg-white border border-border rounded-card p-6">
-          <h2 className="text-lg font-medium text-ink mb-4">체질별 평균 단백질 증감</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={proteinChangeByConstitution}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ECE9E2" />
-              <XAxis
-                dataKey="name"
-                stroke="#A89B76"
-                style={{ fontSize: '12px' }}
-              />
-              <YAxis
-                stroke="#A89B76"
-                style={{ fontSize: '12px' }}
-                label={{
-                  value: '평균 증감 (kg)',
-                  angle: -90,
-                  position: 'insideLeft',
-                  style: { fontSize: '11px', fill: '#A89B76' },
-                }}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #ECE9E2',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                }}
-              />
-              <Bar dataKey="avgChange" radius={[4, 4, 0, 0]}>
-                {proteinChangeByConstitution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
         {/* 인사이트 섹션 */}
-        <div className="mt-6 bg-apricot bg-opacity-10 border border-apricot border-opacity-30 rounded-lg p-6">
+        <div className="bg-apricot bg-opacity-10 border border-apricot border-opacity-30 rounded-lg p-6">
           <h3 className="text-base font-bold text-apricot-ink mb-3">주요 인사이트</h3>
           <ul className="space-y-2 text-sm text-ink">
             <li className="flex items-start gap-2">
