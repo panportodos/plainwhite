@@ -28,6 +28,8 @@
   --color-diet-plant: #1D9E75;
   --color-diet-carbs: #D4537E;
   --color-diet-fat: #639922;
+  --color-diet-good: #1D9E75;
+  --color-diet-caution: #D4537E;
 
   /* 라운드 */
   --radius-card: 12px;

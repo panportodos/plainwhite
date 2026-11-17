@@ -26,7 +26,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # 사이트 조립: 루트(/plainwhite/)는 랜딩페이지, /plainwhite/solution/ 은 앱
+      # 사이트 조립: 루트(/)는 랜딩페이지, /solution/ 은 앱 (www.plainwhite.co.kr)
       - run: |
           mkdir _site
           cp -r landing/. _site/

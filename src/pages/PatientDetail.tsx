@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Topbar } from '../components/Topbar';
 import { ConstitutionBadge } from '../components/ConstitutionBadge';
-import { getPatientById, getInbodyRecords, getAllPatients } from '../lib/storage';
+import { getPatientById, getInbodyRecords, getAllPatients, getAllInbodyRecords } from '../lib/storage';
+import { MusclePredictionCard } from '../components/MusclePredictionCard';
 import { DIET_COLORS } from '../lib/constants';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { ChevronDown, Activity, Utensils, Check } from 'lucide-react';
@@ -21,6 +22,7 @@ export function PatientDetail() {
   const patient = useMemo(() => getPatientById(id!), [id]);
   const inbodyRecords = useMemo(() => getInbodyRecords(id), [id]);
   const allPatients = useMemo(() => getAllPatients(), []);
+  const allInbodyRecords = useMemo(() => getAllInbodyRecords(), []);
 
   // 현재 선택된 인바디 기록 (없으면 최신)
   const currentRecord = useMemo(() => {
@@ -507,6 +509,14 @@ export function PatientDetail() {
             </ResponsiveContainer>
           </div>
         )}
+
+        {/* 근육량 증가 예측 (베타) */}
+        <MusclePredictionCard
+          patient={patient}
+          patientRecords={inbodyRecords}
+          allPatients={allPatients}
+          allRecords={allInbodyRecords}
+        />
 
         {/* 진입 버튼 */}
         <div className="flex gap-4">
