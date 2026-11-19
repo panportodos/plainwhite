@@ -204,11 +204,14 @@ function AnalysisSheet({ r, page }: { r: ReportData; page: string }) {
           ? ['good', '근육 증가']
           : ['none', '체성분 유지'];
 
+  const adh = r.adherence;
   const adherenceVerdict: [Verdict, string] = isFirst
     ? ['none', '오늘부터 복용 시작']
-    : p.adherenceRate >= 80
-      ? ['good', `복용 순응도 ${p.adherenceRate}% · 좋음`]
-      : ['warn', `복용 순응도 ${p.adherenceRate}% · 복용이 줄었어요`];
+    : !adh
+      ? ['none', '이 회차 당시 복용 기록 없음']
+      : adh.rate >= 80
+        ? ['good', `복용 순응도 ${adh.rate}% · 좋음`]
+        : ['warn', `복용 순응도 ${adh.rate}% · 복용이 줄었어요`];
 
   const compareBase = declined && r.declineBase === 'prev' && r.prev ? r.prev : r.first;
   const values = (key: 'skeletalMuscle' | 'bodyFat' | 'protein') => r.history.map((h) => h[key]);
@@ -239,7 +242,7 @@ function AnalysisSheet({ r, page }: { r: ReportData; page: string }) {
             <span className="font-mono text-lg font-semibold block">{r.record.testedAt.replaceAll('-', '.')}</span>
             <span className="text-[11.5px] text-muted block">
               {isFirst ? '첫 측정' : compareBase === r.first ? `첫 측정 ${shortDate(r.first.testedAt)} 대비` : `지난 측정 ${shortDate(compareBase.testedAt)} 대비`}
-              {!isFirst && ` · 복용 ${p.takingDays}일`}
+              {!isFirst && adh?.days != null && ` · 복용 ${adh.days}일`}
             </span>
           </div>
         </section>
@@ -286,8 +289,14 @@ function AnalysisSheet({ r, page }: { r: ReportData; page: string }) {
                 </>
               ) : (
                 <>
-                  <Metric label="복용 순응도" value={`${p.adherenceRate}%`} pct={p.adherenceRate} color={p.adherenceRate >= 80 ? 'bg-navy' : 'bg-apricot'} />
-                  <Metric label="복용 일수" value={`${p.takingDays}일`} />
+                  {adh ? (
+                    <>
+                      <Metric label={adh.source === 'current' ? '복용 순응도 (현재 기록)' : '복용 순응도 (측정 당시)'} value={`${adh.rate}%`} pct={adh.rate} color={adh.rate >= 80 ? 'bg-navy' : 'bg-apricot'} />
+                      {adh.days != null && <Metric label="복용 일수" value={`${adh.days}일`} />}
+                    </>
+                  ) : (
+                    <p className="text-xs text-muted leading-relaxed">이 회차 측정 당시의 복용 기록이 없어 표시하지 않습니다. 최신 회차 리포트에서 현재 복용 기록을 확인할 수 있습니다.</p>
+                  )}
                 </>
               )}
             </DataCard>
@@ -402,13 +411,13 @@ function GuideSheet({ r, page }: { r: ReportData; page: string }) {
         {/* 복용 가이드 */}
         <section>
           <SectionTitle icon={Circle}>{info.productName} 복용 가이드</SectionTitle>
-          <div className="grid grid-cols-4 gap-2.5 max-sm:grid-cols-2">
+          <div className={`grid ${r.situation === 'first' || r.adherence ? 'grid-cols-4' : 'grid-cols-3'} gap-2.5 max-sm:grid-cols-2`}>
             {[
               ['1회 섭취량', '10g · 5스푼'],
               ['하루 횟수', '2회'],
               ['권장 시점', '아침 공복 · 운동 전후'],
-              r.situation === 'first' ? ['복용 시작', '오늘부터'] : ['복용 순응도', `${p.adherenceRate}%`],
-            ].map(([k, v]) => (
+              r.situation === 'first' ? ['복용 시작', '오늘부터'] : r.adherence ? ['복용 순응도', `${r.adherence.rate}%`] : null,
+            ].filter((x): x is string[] => x !== null).map(([k, v]) => (
               <div key={k} className="bg-surface rounded-lg px-3 py-2.5 grid gap-0.5">
                 <span className="text-[11px] text-muted">{k}</span>
                 <b className="text-sm">{v}</b>
@@ -570,43 +579,56 @@ function DietSections({ r }: { r: ReportData }) {
       </section>
 
       <section>
-        <SectionTitle icon={FlaskConical}>같은 3일 식단으로 본 비타민·무기질</SectionTitle>
-        <div className="grid gap-1.5" role="table" aria-label="3일 평균 비타민 무기질 섭취 추정치와 권장량 대비 비율">
-          <div className="grid grid-cols-[92px_minmax(0,1fr)_118px_46px] gap-2.5 items-center text-[11px] text-muted max-sm:grid-cols-[76px_minmax(0,1fr)_46px]" role="row">
+        <SectionTitle icon={FlaskConical}>같은 3일 기록으로 본 비타민·무기질</SectionTitle>
+        <p className="text-[12px] text-muted mb-2.5">
+          {shortDate(d.analysis.from)}–{shortDate(d.analysis.to)} 3일 기록의 <b className="text-ink">하루 평균 추정 섭취량</b>을 참고 기준과 나란히 놓았습니다.
+          3일 사진 추정치라 결핍이나 과잉을 판정하는 값은 아닙니다.
+        </p>
+        <div className="grid gap-1.5" role="table" aria-label="3일 기록의 비타민 무기질 추정 섭취량과 참고 기준">
+          <div className="grid grid-cols-[92px_minmax(0,1fr)_150px_52px] gap-2.5 items-center text-[11px] text-muted max-sm:grid-cols-[76px_minmax(0,1fr)_52px]" role="row">
             <span>영양소</span>
-            <span className="flex justify-between font-mono text-[10px]"><b>0%</b><b>권장량 100%</b><b>200%</b></span>
-            <span className="text-right max-sm:hidden">3일 평균 / 권장량</span>
-            <span />
+            <span className="flex justify-between font-mono text-[10px]"><b>0%</b><b>참고 기준</b><b>200%</b></span>
+            <span className="text-right max-sm:hidden">추정 섭취량 / 참고 기준</span>
+            <span className="text-right">기준 대비</span>
           </div>
-          {d.nutrients.map((n) => (
-            <div key={n.key} className="grid grid-cols-[92px_minmax(0,1fr)_118px_46px] gap-2.5 items-center text-[12.5px] max-sm:grid-cols-[76px_minmax(0,1fr)_46px]" role="row">
-              <span className="font-medium whitespace-nowrap">{n.label}</span>
-              <div className="h-2 bg-surface rounded relative">
-                <i className={`absolute inset-y-0 left-0 rounded ${n.level === '부족' ? 'bg-warn' : n.level === '과다' ? 'bg-[#7A3E8F]' : 'bg-diet-good'}`} style={{ width: `${Math.min(n.ratio / 2, 1) * 100}%` }} />
-                <span className="absolute left-1/2 -top-1 -bottom-1 w-0.5 bg-ink" />
+          {d.nutrients.map((n) => {
+            const pct = Math.round(n.ratio * 100);
+            return (
+              <div key={n.key} className="grid grid-cols-[92px_minmax(0,1fr)_150px_52px] gap-2.5 items-center text-[12.5px] max-sm:grid-cols-[76px_minmax(0,1fr)_52px]" role="row">
+                <span className="font-medium whitespace-nowrap">{n.label}</span>
+                <div className="h-2 bg-surface rounded relative" title={`참고 기준: ${n.refType}`}>
+                  <i className="absolute inset-y-0 left-0 rounded bg-[#5B6F96]" style={{ width: `${Math.min(n.ratio / 2, 1) * 100}%` }} />
+                  <span className="absolute left-1/2 -top-1 -bottom-1 w-0.5 bg-ink" />
+                </div>
+                <span className="font-mono text-[11.5px] text-muted text-right whitespace-nowrap max-sm:hidden">
+                  {n.avg.toLocaleString()} / {n.ref.toLocaleString()}{n.unit}
+                </span>
+                <span className="font-mono text-[12px] font-semibold text-right tabular-nums">{pct}%</span>
               </div>
-              <span className="font-mono text-[11.5px] text-muted text-right whitespace-nowrap max-sm:hidden">{n.avg.toLocaleString()} / {n.ref.toLocaleString()}{n.unit}</span>
-              <span className={`text-[11px] font-bold text-center py-0.5 rounded ${n.level === '부족' ? 'bg-warn-wash text-warn' : n.level === '과다' ? 'bg-[#F3E8F7] text-[#7A3E8F]' : 'bg-good-wash text-diet-good'}`}>{n.level}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
         {(() => {
-          const fixes = d.nutrients.filter((n) => n.level !== '적정').sort((a, b) => Math.abs(1 - b.ratio) - Math.abs(1 - a.ratio)).slice(0, 3);
+          const fixes = d.nutrients.filter((n) => d.focusNutrients.includes(n.key));
           if (!fixes.length) return null;
           return (
-            <div className="grid grid-cols-3 gap-2.5 mt-3.5 max-sm:grid-cols-1">
-              {fixes.map((n) => (
-                <div key={n.key} className="border border-border rounded-lg px-3 py-2.5 text-[12.5px] grid gap-0.5">
-                  <b>{n.level === '과다' ? `${n.label} 줄이기` : n.label}</b>
-                  <span className="text-[11px] text-muted">{n.role}</span>
-                  <span>{n.tip}</span>
-                </div>
-              ))}
-            </div>
+            <>
+              <p className="text-[12px] text-muted mt-3.5 mb-2">이번 3일 기록에서 참고 기준과 차이가 컸던 영양소의 음식 제안</p>
+              <div className="grid grid-cols-3 gap-2.5 max-sm:grid-cols-1">
+                {fixes.map((n) => (
+                  <div key={n.key} className="border border-border rounded-lg px-3 py-2.5 text-[12.5px] grid gap-0.5">
+                    <b>{n.key === 'sodium' ? `${n.label} 줄이기` : `${n.label} 더하기`}</b>
+                    <span className="text-[11px] text-muted">{n.role} · 기준의 {Math.round(n.ratio * 100)}%</span>
+                    <span>{n.tip}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           );
         })()}
         <p className="text-[11px] text-muted mt-2">
-          사진으로 추정한 값이라 단백질보다 오차가 큽니다. 부족·적정·과다 단계로 참고해 주세요. 권장량: {d.referenceLabel}
+          참고 기준: {d.referenceLabel}. 비타민 D·식이섬유는 충분섭취량, 나트륨은 만성질환위험감소섭취량, 나머지는 권장섭취량입니다.
+          사진으로 추정한 값이라 단백질보다 오차가 큽니다.
         </p>
       </section>
     </>

@@ -24,6 +24,9 @@ export interface InbodyRecord {
   bodyWater: number; // 체수분 L
   visceralFat: number; // 내장지방 레벨
   score: number; // 인바디 점수
+  // 측정 당시의 복용 기록 (있으면 리포트에 그 값을 씀, 없는 과거 회차는 복용 기록을 표시하지 않음)
+  adherenceRate?: number; // %
+  takingDays?: number; // 일
 }
 
 // 식단 기록

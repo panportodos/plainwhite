@@ -5,7 +5,7 @@
 import type { DietAnalysis, InbodyRecord, NutrientKey, Patient } from './types';
 import { getDietByConstitution } from './dietByConstitution';
 import { CONSTITUTION_MAP } from './constants';
-import { NUTRIENTS, nutrientLevel, nutrientReference, referenceLabel, type NutrientLevel } from './nutrition';
+import { NUTRIENTS, nutrientReference, pickFocusNutrients, referenceLabel, REFERENCE_SOURCE, type ReferenceType } from './nutrition';
 
 // 식단 분석은 인바디 측정일 기준 이 기간 안의 것만 리포트에 넣음
 export const DIET_VALID_DAYS = 30;
@@ -33,6 +33,8 @@ export interface ReportData {
   // 감소 상황에서 무엇과 비교하는지 (직전 측정보다 줄었으면 prev, 아니면 첫 측정보다 줄어든 경우)
   declineBase: 'prev' | 'first' | null;
   periodWeeks: number; // 첫 측정 ~ 이번 측정
+  // 이 회차의 복용 기록. 측정 당시 기록이 있으면 그 값, 최신 회차면 현재 값, 과거 회차인데 당시 기록이 없으면 null(표시 안 함)
+  adherence: { rate: number; days: number | null; source: 'record' | 'current' } | null;
   step: 1 | 2 | 3;
   diet: DietSummary | null;
   goals: { nextDate: string; main: { label: string; value: string; note: string }; protein: number };
@@ -45,8 +47,11 @@ export interface DietSummary {
   avg: { breakfast: number; lunch: number; dinner: number; snack: number; total: number };
   ratio: number; // 하루 목표 대비
   weakestMeal: { label: string; avg: number };
-  nutrients: { key: NutrientKey; label: string; unit: string; role: string; tip: string; avg: number; ref: number; ratio: number; level: NutrientLevel }[];
+  // 3일 기록의 추정 섭취량 vs 참고 기준 (판정 없이 비율만)
+  nutrients: { key: NutrientKey; label: string; unit: string; refType: ReferenceType; role: string; tip: string; avg: number; ref: number; ratio: number }[];
+  focusNutrients: NutrientKey[]; // 음식 제안 대상 (기준보다 낮게 추정된 순 + 나트륨이 높게 추정된 경우)
   referenceLabel: string;
+  referenceVerified: boolean;
   proteinIdeas: { title: string; grams: number; note: string }[];
 }
 
@@ -127,7 +132,7 @@ function buildDiet(analysis: DietAnalysis, patient: Patient, target: number): Di
     const value = analysis.nutrients[info.key];
     const ref = nutrientReference(info.key, patient.gender, patient.age);
     const ratio = value / ref;
-    return { ...info, avg: value, ref, ratio, level: nutrientLevel(info.key, ratio) };
+    return { ...info, avg: value, ref, ratio };
   });
 
   // 부족분을 체질 음식으로 채우는 제안 (부족량을 넘을 때까지 최대 2개)
@@ -151,7 +156,9 @@ function buildDiet(analysis: DietAnalysis, patient: Patient, target: number): Di
     ratio: avg.total / target,
     weakestMeal,
     nutrients,
+    focusNutrients: pickFocusNutrients(nutrients).map((n) => n.key),
     referenceLabel: referenceLabel(patient.gender, patient.age),
+    referenceVerified: REFERENCE_SOURCE.verified,
     proteinIdeas,
   };
 }
@@ -212,6 +219,14 @@ export function buildReport(
   else situation = 'improved';
 
   const step: 1 | 2 | 3 = record.protein < proteinStandard ? 1 : 2;
+
+  const isLatest = idx === records.length - 1;
+  const adherence: ReportData['adherence'] =
+    record.adherenceRate !== undefined
+      ? { rate: record.adherenceRate, days: record.takingDays ?? null, source: 'record' }
+      : isLatest
+        ? { rate: patient.adherenceRate, days: patient.takingDays, source: 'current' }
+        : null;
   const periodWeeks = Math.round(daysBetween(first.testedAt, record.testedAt) / 7);
 
   const nextDate = addDays(record.testedAt, 28);
@@ -242,6 +257,7 @@ export function buildReport(
     prevChanges,
     declineBase,
     periodWeeks,
+    adherence,
     step,
     diet,
     goals: { nextDate, main, protein: dailyProteinTarget },
@@ -260,8 +276,9 @@ export function defaultTexts(d: Omit<ReportData, 'texts'>): ReportTexts {
   // 식단 문단 (있으면 분석 결과, 없으면 안내)
   const dietPara: ReportTexts['paragraphs'][number] = d.diet
     ? (() => {
-        const low = d.diet.nutrients.filter((n) => n.level === '부족').slice(0, 2).map((n) => n.label);
-        const high = d.diet.nutrients.filter((n) => n.level === '과다').map((n) => n.label);
+        const focus = d.diet.nutrients.filter((n) => d.diet!.focusNutrients.includes(n.key));
+        const low = focus.filter((n) => n.key !== 'sodium').slice(0, 2).map((n) => `${n.label} ${Math.round(n.ratio * 100)}%`);
+        const high = focus.filter((n) => n.key === 'sodium').map((n) => `${n.label} ${Math.round(n.ratio * 100)}%`);
         const parts: ReportTexts['paragraphs'][number] = [
           { text: '가져오신 3일 치 식단을 보면 하루 단백질 섭취가 ' },
           { text: `평균 ${d.diet.avg.total}g으로 목표 ${d.dailyProteinTarget}g의 ${Math.round(d.diet.ratio * 100)}%`, tone: d.diet.ratio >= 1 ? 'good' : 'warn' },
@@ -272,12 +289,12 @@ export function defaultTexts(d: Omit<ReportData, 'texts'>): ReportTexts {
           parts.push({ text: '했습니다. ' });
         }
         if (low.length || high.length) {
-          parts.push({ text: '같은 식단에서 ' });
+          parts.push({ text: '같은 3일 기록으로 추정한 섭취량을 참고 기준과 비교하면 ' });
           const bits = [];
-          if (low.length) bits.push(`${low.join('와 ')}는 권장량에 못 미쳤${high.length ? '고' : '습니다'}`);
-          if (high.length) bits.push(`${high.join('·')}은 권장량을 넘었습니다`);
+          if (low.length) bits.push(`${low.join(', ')}로 기준보다 낮${high.length ? '고' : '게 나왔습니다'}`);
+          if (high.length) bits.push(`${high.join(', ')}로 기준보다 높게 나왔습니다`);
           parts.push({ text: bits.join(', '), tone: 'warn' });
-          parts.push({ text: '. 2페이지의 음식 가이드를 참고해 주세요.' });
+          parts.push({ text: '. 사진으로 추정한 값이니 식단 분석 페이지의 음식 제안을 참고해 주세요.' });
         }
         return parts;
       })()
@@ -370,9 +387,13 @@ export function defaultTexts(d: Omit<ReportData, 'texts'>): ReportTexts {
         : ` 몸속 단백질량은 ${kg(d.record.protein)}kg이에요 (표준 ${d.proteinStandard}kg).`),
     paragraphs: [
       [
-        { text: `${p.name} 님의 인바디${d.diet ? '·식단' : ''}·복용 기록을 분석한 결과, ${eulReul(product)} ` },
-        { text: `${p.adherenceRate}%의 순응도`, tone: p.adherenceRate >= 80 ? 'good' : 'warn' },
-        { text: `로 복용한 ${d.periodWeeks}주 동안 ` },
+        ...(d.adherence
+          ? [
+              { text: `${p.name} 님의 인바디${d.diet ? '·식단' : ''}·복용 기록을 분석한 결과, ${eulReul(product)} ` },
+              { text: `${d.adherence.rate}%의 순응도`, tone: (d.adherence.rate >= 80 ? 'good' : 'warn') as 'good' | 'warn' },
+              { text: `로 복용한 ${d.periodWeeks}주 동안 ` },
+            ]
+          : [{ text: `${p.name} 님의 인바디${d.diet ? '·식단' : ''} 기록을 분석한 결과, ${d.periodWeeks}주 동안 ` }]),
         { text: trend, tone: 'good' },
         { text: `이 ${d.round}번의 측정에서 이어졌습니다.` },
       ],
