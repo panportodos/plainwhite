@@ -8,7 +8,7 @@ import { getPatientById, getInbodyRecords, getAllPatients, getAllInbodyRecords }
 import { MusclePredictionCard } from '../components/MusclePredictionCard';
 import { DIET_COLORS } from '../lib/constants';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { ChevronDown, Activity, Utensils, Check } from 'lucide-react';
+import { ChevronDown, Activity, Utensils, Check, FileText } from 'lucide-react';
 
 export function PatientDetail() {
   const { id } = useParams<{ id: string }>();
@@ -533,6 +533,13 @@ export function PatientDetail() {
           >
             <Activity size={18} />
             <span className="font-medium">인바디 스캔</span>
+          </button>
+          <button
+            onClick={() => navigate(`/patients/${id}/report`)}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-navy text-navy rounded-lg hover:bg-surface transition-colors"
+          >
+            <FileText size={18} />
+            <span className="font-medium">분석 리포트</span>
           </button>
         </div>
       </div>

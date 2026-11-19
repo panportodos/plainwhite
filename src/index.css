@@ -31,6 +31,13 @@
   --color-diet-good: #1D9E75;
   --color-diet-caution: #D4537E;
 
+  /* 분석 리포트 */
+  --color-warn: #C2541E;
+  --color-warn-wash: #FCEEE6;
+  --color-good-wash: #E6F4EE;
+  --color-apricot-wash: #FBF1E8;
+  --color-report-dark: #22252B;
+
   /* 라운드 */
   --radius-card: 12px;
   --radius-inner: 8px;
@@ -70,4 +77,22 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #8A7D5E;
+}
+
+/* 분석 리포트: 부족분 빗금 */
+.diet-gap {
+  background: repeating-linear-gradient(135deg, #FCEEE6 0 6px, #F7D9C6 6px 12px);
+}
+
+/* 분석 리포트 출력 (A4 2장) */
+@media print {
+  @page { size: A4; margin: 10mm; }
+  body { background: #fff; }
+  aside, .no-print { display: none !important; }
+  main { margin-left: 0 !important; }
+  .report-page { background: #fff !important; padding: 0 !important; min-height: 0 !important; }
+  .report-sheets { margin: 0 !important; padding: 0 !important; max-width: none !important; gap: 0 !important; }
+  .report-sheet { box-shadow: none !important; border-radius: 0 !important; break-after: page; zoom: 0.84; }
+  .report-sheet:last-child { break-after: auto; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

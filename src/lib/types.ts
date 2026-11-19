@@ -24,6 +24,9 @@ export interface InbodyRecord {
   bodyWater: number; // 체수분 L
   visceralFat: number; // 내장지방 레벨
   score: number; // 인바디 점수
+  // 측정 당시의 복용 기록 (있으면 리포트에 그 값을 씀, 없는 과거 회차는 복용 기록을 표시하지 않음)
+  adherenceRate?: number; // %
+  takingDays?: number; // 일
 }
 
 // 식단 기록
@@ -115,4 +118,31 @@ export interface ConstitutionDiet {
   recommended: string[]; // 권장 음식 목록
   restricted: string[]; // 절제 음식 목록
   proteinBonus: number; // 담백환 복용 시 단백질 목표 가산값 (g)
+}
+
+// ---------- 분석 리포트 ----------
+
+// 식단 사진으로 분석하는 비타민·무기질 8종
+export type NutrientKey =
+  | 'vitaminD'
+  | 'calcium'
+  | 'fiber'
+  | 'magnesium'
+  | 'vitaminC'
+  | 'iron'
+  | 'vitaminB12'
+  | 'sodium';
+
+// 3일 식단 분석 결과 (환자가 3일 치 식단 사진을 가져올 때마다 1건)
+export interface DietAnalysis {
+  id: string;
+  patientId: string;
+  from: string; // 분석한 첫날 (YYYY-MM-DD)
+  to: string; // 분석한 마지막 날
+  photoCount: number;
+  // 하루별 끼니 단백질 (g)
+  daily: { date: string; breakfast: number; lunch: number; dinner: number; snack: number }[];
+  // 영양소별 3일 하루 평균 섭취량 (단위는 nutrition.ts의 NUTRIENTS 참고)
+  nutrients: Record<NutrientKey, number>;
+  createdAt: string;
 }
